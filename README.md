@@ -1,6 +1,6 @@
 # Catch the fish
 
-A brief description of the application here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Catch the fish will be a simple game where a user will see fish in the ocean, and atempt to catch as many as they can over a 30 second interval. Each time the player clicks on a fish it will dissapear and add to their total score displayed at the top of the screen. Users will be able to view their scores compared to others on the leaderboard from the menu or upon completion of the game.
 
 ## 🚀 Specification Deliverable
 
