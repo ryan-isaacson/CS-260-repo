@@ -12,14 +12,16 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] A concise and compelling elevator pitch
 - [x] Description of key features
 - [x] Description of how you will use each technology
-- [ ] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
+- [x] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
 
 ### Elevator pitch
 
 The ocean is full of incredible creatures, but the one we humans love the most is fish. We eat them, we admire them, but most of all, we love hunting for them. Catch the Fish draws you into a fast-paced competition where you race to collect as many fish as possible in the given time period. See if you have what it takes to become the fish-catching champion.
 
 ### Design
+
 Catch the fish concept images
+
 ![Catch the Fish menu screen](https://github.com/ryan-isaacson/CS-260-repo/blob/main/Images/Catch%20the%20Fish%20menu%20screen%20concept.png)
 ![Catch the Fish game screen](https://github.com/ryan-isaacson/CS-260-repo/blob/main/Images/Catch%20the%20Fish%20play%20screen%20concept.png)
 ![Catch the Fish leaderboard screen](https://github.com/ryan-isaacson/CS-260-repo/blob/main/Images/Catch%20the%20Fish%20leaderboard%20screen%20concept.png)
