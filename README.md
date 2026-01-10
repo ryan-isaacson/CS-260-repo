@@ -41,12 +41,12 @@ sequenceDiagram
 
 I am going to use the required technologies in the following ways.
 
-- **HTML** - Description here
-- **CSS** - Description here
-- **React** - Description here
-- **Service** - Description here
-- **DB/Login** - Description here
-- **WebSocket** - Description here
+- **HTML** - Four different views, login/register, play, scoreboard, instructions.
+- **CSS** - Ocean/water color scheme, fish will highlight for a moment when clicked on.
+- **React** - Single page application, reactive user controls, switching between views based on user interaction, storing and updating game information.
+- **Service** -  Storing/retrieving scores, creating/pulling user login information for authentication and access control, third party call to get random fish facts or pictures of the ocean.
+- **DB/Login** - Stores login information and game scores.
+- **WebSocket** - Live updates of the leaderboard
 
 ## 🚀 AWS deliverable
 
