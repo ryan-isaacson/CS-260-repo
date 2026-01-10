@@ -21,7 +21,7 @@ The ocean is full of incredible creatures, but the one we humans love the most i
 ### Design
 
 ![Design image](placeholder.png)
-![Catch the Fish menu screen](Images/Catch the Fish menu screen concept.png)
+![Catch the Fish menu screen](https://github.com/ryan-isaacson/CS-260-repo/blob/main/Images/Catch%20the%20Fish%20leaderboard%20screen%20concept.png)
 
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
