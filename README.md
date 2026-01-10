@@ -33,9 +33,12 @@ sequenceDiagram
 
 ### Key features
 
-- Describe your key feature
-- Describe your key feature
-- Describe your key feature
+- Login, logout, and register
+- View leaderboard
+- Receive real-time leaderboard updates from other players
+- Play the game by catching fish under a time limit
+- Instructions for the game
+- Read fish facts
 
 ### Technologies
 
