@@ -1,8 +1,8 @@
-# Catch the fish
+# Catch the Fish
 
 [My Notes](notes.md)
 
-Catch the fish will be a simple game where a user will see fish in the ocean, and atempt to catch as many as they can over a 30 second interval. Each time the player clicks on a fish it will dissapear and add to their total score displayed at the top of the screen. Users will be able to view their scores compared to others on the leaderboard from the menu or upon completion of the game.
+Catch the Fish will be a simple game where a user will see fish in the ocean, and atempt to catch as many as they can over a 30 second interval. Each time the player clicks on a fish it will dissapear and add to their total score displayed at the top of the screen. Users will be able to view their scores compared to others on the leaderboard from the menu or upon completion of the game.
 
 ## 🚀 Specification Deliverable
 
