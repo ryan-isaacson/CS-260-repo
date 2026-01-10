@@ -1,4 +1,4 @@
-# Your startup name here
+# Catch the fish
 
 [My Notes](notes.md)
 
