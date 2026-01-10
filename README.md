@@ -16,7 +16,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 ### Elevator pitch
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+The ocean is full of incredible creatures, but the one we humans love the most is fish. We eat them, we admire them, but most of all, we love hunting for them. Catch the Fish draws you into a fast-paced competition where you race to collect as many fish as possible in the given time period. See if you have what it takes to become the fish-catching champion.
 
 ### Design
 
