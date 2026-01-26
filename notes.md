@@ -21,30 +21,30 @@ No problems worked just like it said in the [instruction](https://github.com/web
 
 I ran my notes through chatGBT for formatting so it would look how I wanted it to
 
+```
 HTML things I learned:
 <head> = The name that shows up on the actual tab of the website
 <body> = Contains almost everything else on the website including:
-  <nav>
-  <header>
-  <main>
-  <footer>
+      <nav>
+      <header>
+      <main>
+      <footer>
 <h1> = Big header
 <h2> = Next big header
 <ul> = Creates a bulleted list
-  <li> = List item
+      <li> = List item
 <a> = Makes links, example: <a href="index.html">Home</a>
 <hr> = Makes a line across the screen separating sections
 <table> = Makes a table structure
-  <tr> = Table row
-    <th> = Table header cell
-    <td> = Table data cell
+      <tr> = Table row
+            <th> = Table header cell
+            <td> = Table data cell
 <button> = Makes a button
 <p> = Regular text
 <br> = Line break
-<div> = Generic container (put multiple elements inside the same box)
+<div> = Generic container (Put these things in the same box)
 <svg> = Helps make pictures
-
-
+```
 
 
 ## CSS
