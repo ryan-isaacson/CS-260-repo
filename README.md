@@ -64,12 +64,12 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **HTML pages** - I created the four different HTML pages for my website: Index, game, instructions, and scoreboard
 - [x] **Proper HTML element usage** - I formatted my HTML pages using body, header, nav, main, and footer.
 - [x] **Links** - I have links on every page that lead to each of the other pages.
-- [ ] **Text** - I did not complete this part of the deliverable.
+- [x] **Text** - Completed all of the text for my HTML pages.
 - [x] **3rd party API placeholder** - I have a placeholder for where I'll get fish fun facts.
 - [x] **Images** - I created box buttons with fish inside of them as a placeholder for how the fish will appear on the screen in the game for people to earn points.
 - [x] **Login placeholder** - I have a login placeholder box on the main index page.
-- [ ] **DB data placeholder** - I did not complete this part of the deliverable.
-- [ ] **WebSocket placeholder** - I did not complete this part of the deliverable.
+- [x] **DB data placeholder** - Created a leaderboard placeholder where scores will update with the new high scores.
+- [x] **WebSocket placeholder** - Made a spot in the game menu where it will live inform users of when someone completes a game and what score they got.
 
 ## 🚀 CSS deliverable
 
