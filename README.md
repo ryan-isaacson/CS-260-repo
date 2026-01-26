@@ -65,7 +65,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **Proper HTML element usage** - I formatted my HTML pages using body, header, nav, main, and footer.
 - [x] **Links** - I have links on every page that lead to each of the other pages.
 - [ ] **Text** - I did not complete this part of the deliverable.
-- [ ] **3rd party API placeholder** - I did not complete this part of the deliverable.
+- [x] **3rd party API placeholder** - I have a placeholder for where I'll get fish fun facts.
 - [x] **Images** - I created box buttons with fish inside of them as a placeholder for how the fish will appear on the screen in the game for people to earn points.
 - [x] **Login placeholder** - I have a login placeholder box on the main index page.
 - [ ] **DB data placeholder** - I did not complete this part of the deliverable.
