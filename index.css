@@ -1,0 +1,25 @@
+
+
+header {
+  display: flex; /*make title go on the left*/
+  align-items: center; /*center align text */
+  
+  padding: 20px; /*height of the total header */
+  justify-content: space-around; /*space out title and links */
+  background-color: #0044aa; /* darker blue than body */
+  color: #e1e1e1; /* white text for contrast */
+}
+
+header nav ul {
+  list-style: none; /*remove bullets */
+  margin: 0; /* remove extra margin */
+  padding: 0px; /*remove padding */
+  display: flex; /*make the links go horizontal */
+  gap: 16px;
+}
+
+header nav a {
+  color: #f0f0f0; /* make the links white */
+  text-decoration: none; /* Remove underline */
+  padding: 8px; /* space out links a little */
+}
