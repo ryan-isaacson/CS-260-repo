@@ -48,3 +48,51 @@ footer a { /* github link inside footer */
   text-decoration: none; /* remove underline */
   margin-left: auto; /* push the link to the right */
 }
+
+
+
+/* style the main content of index */
+body {
+  display: flex; /* use flexbox to center content */
+  flex-direction: column; /* stack boxes vertically */
+  min-height: 700px; /* more specifically align content to be in the middle */
+}
+
+/* work with body to center the main content between header and footer */
+main {
+  flex: 1; /*align content to be in the middle */
+  display: flex; /* use flexbox to center content */
+  flex-direction: column; /* stack boxes vertically */
+  justify-content: center; /* center content vertically */
+  gap: 12px; /* space out input boxes and buttons */
+  color: #f8f8f8; /* make the text white */
+}
+
+/* style the input boxes */
+main input[type="email"], main input[type="password"] /* include email and password input boxes */ {
+  width: 260px; /* make input boxes wider */
+  padding: 8px 10px; /* make input boxes bigger */
+  border-radius: 4px; /* round the edges */
+  border: 0px solid rgb(227, 227, 227); /* make the borders light */
+}
+
+/* group buttons and center them */
+main .button-row {
+  display: flex; /* use flexbox to align buttons */
+  gap: 12px; /* space out buttons */
+  justify-content: center; /* center buttons */
+}
+
+/* style the buttons */
+main button {
+  padding: 8px 12px; /* make buttons bigger */
+  border-radius: 4px; /* round the edges */
+  border: none; /* remove border */
+  background-color: #195395; /* make buttons blue */
+  color: #e8e8e8; /* make button text white */
+}
+
+/* change color when hovering over buttons*/
+main button:hover {
+  background-color: #0f3f76; /* darker blue on hover/focus */
+}
