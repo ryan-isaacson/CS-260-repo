@@ -48,3 +48,30 @@ footer a { /* github link inside footer */
   text-decoration: none; /* remove underline */
   margin-left: auto; /* push the link to the right */
 }
+
+
+body {
+  display: flex; /* use flexbox to center content */
+  flex-direction: column; /* stack boxes vertically */
+  min-height: 700px; /* more specifically align content to be in the middle */
+}
+
+/* work with body to center the main content between header and footer */
+main {
+  flex: 1; /*align content to be in the middle */
+  display: flex; /* use flexbox to center content */
+  flex-direction: column; /* stack boxes vertically */
+  justify-content: center; /* center content vertically */
+  gap: 12px; /* space out input boxes and buttons */
+  color: #f8f8f8; /* make the text white */
+  padding: 64px; /* make the text farther away from the edges */
+}
+
+/* make a box behind paragraph text in main */
+main p {
+  background-color: rgb(98, 158, 255); /* color of the box */
+  padding: 14px 18px; /* space between text and edge of box */
+  border-radius: 10px; /* round the corners of the box */
+  margin: 0 auto; /* make the box only as big as the text*/
+  color: #000000; /* color of the text */
+}
