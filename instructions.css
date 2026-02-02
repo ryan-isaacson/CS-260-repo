@@ -73,5 +73,5 @@ main p {
   padding: 14px 18px; /* space between text and edge of box */
   border-radius: 10px; /* round the corners of the box */
   margin: 0 auto; /* make the box only as big as the text*/
-  color: #000000; /* color of the text */
+  color: #f8f8f8; /* color of the text */
 }
