@@ -49,7 +49,7 @@ HTML things I learned:
 
 ## CSS
 
-CSS took me a very long time to complete. I struggled a lot with trying to get things exactly how I wanted it, but ultimately I am very satasfied with how it turned out.
+CSS took me a very long time to complete. I struggled a lot with trying to get things exactly how I wanted it, but ultimately I am very satasfied with how it turned out. I put comments on just about every single line of my CSS so I could go back and remember what I did for each line and how it works.
 
 Bootstrap is cool, it's very nice on a surface level application to do things easy and quick.
 
