@@ -51,6 +51,10 @@ footer a { /* github link inside footer */
   margin-left: auto; /* push the link to the right */
 }
 
+body {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; /* imported font */
+}
+
 
 /* Style the main content */
 main {

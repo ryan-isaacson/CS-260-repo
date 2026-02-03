@@ -56,6 +56,7 @@ body {
   display: flex; /* use flexbox to center content */
   flex-direction: column; /* stack boxes vertically */
   min-height: 700px; /* more specifically align content to be in the middle */
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; /* imported font */
 }
 
 /* work with body to center the main content between header and footer */
