@@ -24,6 +24,7 @@ header nav a {
 }
 
 
+
 /* Style the footer */
 footer { /*footer bar*/
   position: fixed; /* along with bottom, make footer stick to the bottom */
@@ -34,6 +35,7 @@ footer { /*footer bar*/
   display: flex; /* flexbox for aligning content */
   align-items: center; /* center text vertically */
   padding: 16px; /* give margin between edge and text */
+  z-index: 2; /* make sure footer is above fish layer */
 } 
 
 /* style the text inside the footer */
@@ -47,4 +49,100 @@ footer a { /* github link inside footer */
   font-size: 0.85rem; /* make the text a little smaller */
   text-decoration: none; /* remove underline */
   margin-left: auto; /* push the link to the right */
+}
+
+
+
+/* make a bar under the header for the game info */
+.info-bar {
+  display: flex;
+  background-color: #004799; /* different color for the box */
+  color: #e8e8e8; /* make the text white */
+  padding: 12px 20px; /* space out the box - space from the top, space from the sides */
+  font-weight: 500;
+}
+
+/* left align the username*/
+.info-bar .username {
+  flex: 1;
+  text-align: left;
+}
+
+/* center align the time */
+.info-bar .time {
+  flex: 1;
+  text-align: center;
+}
+
+/* right align the score */
+.info-bar .score {
+  flex: 1;
+  text-align: right;
+}
+
+/* style the game feed */
+.game-feed {
+  position: fixed;
+  top: 120px; /* below header and info bar */
+  padding: 20px 8px; /* space from edges */
+  color: #e8e8e8; /* make the text white */
+  font-size: 0.85rem; /* make the text a little smaller */
+}
+
+.game-feed p {
+  margin: 0; /* make the text closer together */
+  padding: 4px; /* space out each message a little */
+  text-align: left; /* left align text */
+}
+
+
+/* center the start button in the main area */
+.start-button {
+  position: absolute; /* make sure it's where it's supposed to be */
+  top: 50%; /* center start button vertically */
+  left: 50%; /* center start button horizontally */
+  transform: translate(-50%, -50%); /* adjust for button size */
+  padding: 12px 20px; /* make button bigger */
+  border-radius: 8px; /* round the edges */
+  border: none; /* remove border */
+  background-color: #0f3f76; /* make the button blue */
+  color: #e8e8e8; /* make the text white */
+  font-weight: 600; /* make it bold */
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15); /* add shadow under the button */
+  z-index: 3; /* make sure start button is above fish layer */
+}
+
+/* hover effect for start button */
+.start-button:hover {
+  background-color: #1658a2;
+}
+
+/* layer for the fish buttons */
+.fish-layer {
+  position: fixed; /* make sure the fish stay in place */
+  top: 100px; /* make the fish be below the header and info bar */
+  bottom: 28px; /* make sure fish stay above the footer */
+  right: 0; /* keep fish inside the visible area */
+  left: 0; /* keep fish inside the visible area */
+  overflow: hidden; /* keep fish inside the visible area */
+  pointer-events: none; /* don't block clicks on the start button */
+  z-index: 2; /* above the background but below the start button */
+}
+
+.fish-button {
+  position: absolute; /*lets each fish be placed anywhere inside the fish-layer class */
+
+  left: calc(var(--x, 50) * 1%); /* set the horizontal position based on the x axis */
+  top: calc(var(--y, 50) * 1%); /* set the vertical position based on the y axis */
+  transform: translate(-50%, -50%); /*centers the fish on the coordinate so --x/--y point to the fish’s center (not its top-left corner)*/
+  
+  
+  background: transparent; /* make the fish's white background invisible */
+  border: none; /* remove border */
+  pointer-events: auto; /* keep fish clickable */
+}
+
+/* hover effect for fish buttons */
+.fish-button:hover {
+  transform: translate(-50%, -50%) scale(1.05);
 }

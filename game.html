@@ -30,47 +30,50 @@
                 </ul>
             </nav>
         </header>
+        <div class="info-bar">
+            <span class="username">Username: AwesomeDude</span>
+            <span class="time">Time Left: 24s</span>
+            <span class="score">Score: 8</span>
+        </div>
         <main>
-            <p> Username: AwesomeDude</p>
-            <p> Score: 8</p>
-            <p> Time Left: 24s</p>
-            <p>Bob just finished a game with a score of: 52</p>
-            <p>Dave just finished a game with a score of: 37</p>
-            <button>Start Game</button>
-            <br>
-            <br>
-            <button>
-                <svg width="75" height="75">
-                    <text x="-5" y="70" font-size="80">🐟</text>
-                </svg>
-            </button>
-            <button>
-                <svg width="75" height="75">
-                    <text x="-5" y="70" font-size="80">🐟</text>
-                </svg>
-            </button>
-            <button>
-                <svg width="75" height="75">
-                    <text x="-5" y="70" font-size="80">🐟</text>
-                </svg>
-            </button>
-            <br>
-            <br>
-            <button>
-                <svg width="75" height="75">
-                    <text x="-5" y="70" font-size="80">🐟</text>
-                </svg>
-            </button>
-            <button>
-                <svg width="75" height="75">
-                    <text x="-5" y="70" font-size="80">🐟</text>
-                </svg>
-            </button>
-            <button>
-                <svg width="75" height="75">
-                    <text x="-5" y="70" font-size="80">🐟</text>
-                </svg>
-            </button>
+            <div class="game-feed">
+                <p>Bob just finished a game with a score of: 52</p>
+                <p>Dave just finished a game with a score of: 37</p>
+            </div>
+            <button class="start-button">Start Game</button>
+
+            <div class="fish-layer"> <!-- layer for the fish -->
+                <button class="fish-button" style="--x: 10; --y: 20;">
+                    <svg width="75" height="75">
+                        <text x="-5" y="70" font-size="80">🐟</text>
+                    </svg>
+                </button>
+                <button class="fish-button" style="--x: 55; --y: 25;">
+                    <svg width="75" height="75">
+                        <text x="-5" y="70" font-size="80">🐟</text>
+                    </svg>
+                </button>
+                <button class="fish-button" style="--x: 85; --y: 15;">
+                    <svg width="75" height="75">
+                        <text x="-5" y="70" font-size="80">🐟</text>
+                    </svg>
+                </button>
+                <button class="fish-button" style="--x: 20; --y: 60;">
+                    <svg width="75" height="75">
+                        <text x="-5" y="70" font-size="80">🐟</text>
+                    </svg>
+                </button>
+                <button class="fish-button" style="--x: 45; --y: 90;">
+                    <svg width="75" height="75">
+                        <text x="-5" y="70" font-size="80">🐟</text>
+                    </svg>
+                </button>
+                <button class="fish-button" style="--x: 75; --y: 70;">
+                    <svg width="75" height="75">
+                        <text x="-5" y="70" font-size="80">🐟</text>
+                    </svg>
+                </button>
+            </div>
 
 
         </main>
