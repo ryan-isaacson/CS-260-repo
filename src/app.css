@@ -1,5 +1,12 @@
 /*CSS was really hard for me so I have comments next to literally everything so I can remember easier what everything does*/
 
+
+.body {
+  display: flex;
+  flex-direction: column;
+  min-width: 375px;
+}
+
 /* Style the header */
 header {
   display: flex; /*make title go on the left*/
