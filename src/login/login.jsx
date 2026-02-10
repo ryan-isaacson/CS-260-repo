@@ -2,7 +2,7 @@ import React from 'react';
 
 export function Login() {
   return (
-    <main>
+    <main className="home-main">
         <h1>Login</h1>
         <div><input type="email" placeholder="Email"/></div>
         <div><input type="password" placeholder="Password"/></div>

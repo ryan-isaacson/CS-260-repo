@@ -3,7 +3,7 @@ import './instructions.css';
 
 export function Instructions() {
   return (
-    <main>
+    <main className="instructions-main">
         <h2>Instructions</h2>
         <p> 
             Catch The Fish is a game of speed where you see how many fish you can collect 

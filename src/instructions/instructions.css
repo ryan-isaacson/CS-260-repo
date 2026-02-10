@@ -70,6 +70,10 @@ main {
   padding: 64px; /* make the text farther away from the edges */
 }
 
+.instructions-main {
+  padding-top: 164px; /* push content down a little*/
+}
+
 /* make a box behind paragraph text in main */
 main p {
   background-color: rgb(98, 158, 255); /* color of the box */

@@ -6,6 +6,7 @@ html, body, #root {
 }
 body {
   margin: 0;
+  background-color: #1b7dde;
 }
 
 /* Style the header */
@@ -70,7 +71,7 @@ body {
 }
 
 .page-wrapper {
-  min-height: 100vh; /* stretch background to full screen */
+  min-height: 600px; /* nudge content higher */
   display: flex;
   flex-direction: column;
   background-color: #1b7dde;
@@ -84,6 +85,12 @@ main {
   justify-content: center; /* center content vertically */
   gap: 12px; /* space out input boxes and buttons */
   color: #f8f8f8; /* make the text white */
+}
+
+/* keep the home content at the original height while the background fills the screen */
+.home-main {
+  flex: 0 0 auto;
+  min-height: 600px;
 }
 
 /* style the input boxes */
