@@ -66,6 +66,13 @@ body {
   color: #e8e8e8; /* make the text white */
   padding: 12px 20px; /* space out the box - space from the top, space from the sides */
   font-weight: 500;
+  position: fixed; /* keep the bar under the header */
+  top: 72px; /* header height (20px padding + title) */
+  left: 0;
+  right: 0;
+  width: 100%; /* stretch full width */
+  box-sizing: border-box;
+  z-index: 3; /* stay above fish layer */
 }
 
 /* left align the username*/
@@ -89,16 +96,18 @@ body {
 /* style the game feed */
 .game-feed {
   position: fixed;
-  top: 120px; /* below header and info bar */
-  padding: 20px 8px; /* space from edges */
+  top: 128px; /* just below header + info bar */
+  left: 16px;
+  padding: 0; /* no background or box spacing */
   color: #e8e8e8; /* make the text white */
   font-size: 0.85rem; /* make the text a little smaller */
 }
 
 .game-feed p {
   margin: 0; /* make the text closer together */
-  padding: 4px; /* space out each message a little */
+  padding: 2px 0; /* space out each message a little */
   text-align: left; /* left align text */
+  background: transparent;
 }
 
 
