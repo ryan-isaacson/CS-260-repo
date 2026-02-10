@@ -1,10 +1,11 @@
 /*CSS was really hard for me so I have comments next to literally everything so I can remember easier what everything does*/
 
-
-.body {
-  display: flex;
-  flex-direction: column;
-  min-width: 375px;
+/* make the app stretch to the full height of the viewport */
+html, body, #root {
+  height: 100%;
+}
+body {
+  margin: 0;
 }
 
 /* Style the header */
@@ -64,8 +65,15 @@ footer a { /* github link inside footer */
 body {
   display: flex; /* use flexbox to center content */
   flex-direction: column; /* stack boxes vertically */
-  min-height: 700px; /* more specifically align content to be in the middle */
+  min-height: 100%; /* let the app wrapper control viewport height */
   font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; /* imported font */
+}
+
+.page-wrapper {
+  min-height: 100vh; /* stretch background to full screen */
+  display: flex;
+  flex-direction: column;
+  background-color: #1b7dde;
 }
 
 /* work with body to center the main content between header and footer */

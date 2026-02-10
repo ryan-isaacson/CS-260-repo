@@ -10,7 +10,7 @@ import { Instructions } from './instructions/instructions';
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="text-center" style={{ backgroundColor: '#1b7dde' }}>
+      <div className="page-wrapper text-center">
         <header>
           <h1>Catch The Fish</h1>
           <nav>
