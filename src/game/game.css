@@ -1,63 +1,8 @@
 /*CSS was really hard for me so I have comments next to literally everything so I can remember easier what everything does*/
 
-/* Style the header */
-header {
-  display: flex; /*make title go on the left*/
-  align-items: center; /*center align text */
-  
-  padding: 20px; /*height of the total header */
-  justify-content: space-around; /*space out title and links */
-  background-color: #002b5c; /* darker blue than body */
-  color: #e8e8e8; /* make the text white */
-}
-
-header nav ul {
-  list-style: none; /*remove bullets */
-  margin: 0; /* remove extra margin */
-  padding: 0px; /*remove padding */
-  display: flex; /*make the links go horizontal */
-  gap: 16px;
-}
-
-header nav a {
-  color: #e8e8e8; /* make the text white */
-  text-decoration: none; /* Remove underline */
-  padding: 8px; /* space out links a little */
-}
-
-
-
-/* Style the footer */
-footer { /*footer bar*/
-  position: fixed; /* along with bottom, make footer stick to the bottom */
-  bottom: 0; /* make the footer stick to the bottom */
-  width: 100%; /* make the footer go all the way across */
-  height: 28px; /* height of footer */
-  background-color: #002b5c; /* dark blue bar */
-  display: flex; /* flexbox for aligning content */
-  align-items: center; /* center text vertically */
-  padding: 16px; /* give margin between edge and text */
-  z-index: 2; /* make sure footer is above fish layer */
-} 
-
-/* style the text inside the footer */
-footer p { /*p text (author name) inside footer*/
-  margin: 0; /* center text vertically */
-  color: #e8e8e8; /* make the text white */
-  font-size: 0.85rem; /* make the text a little smaller */
-}
-footer a { /* github link inside footer */
-  color: #e8e8e8; /* make the text white */
-  font-size: 0.85rem; /* make the text a little smaller */
-  text-decoration: none; /* remove underline */
-  margin-left: auto; /* push the link to the right */
-}
-
 body {
   font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; /* imported font */
 }
-
-
 
 /* make a bar under the header for the game info */
 .info-bar {
