@@ -15,10 +15,10 @@ export default function App() {
             <h1>Catch The Fish</h1>
             <nav>
                 <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="game.html">Game</a></li>
-                    <li><a href="instructions.html">Instructions</a></li>
-                    <li><a href="leaderboard.html">Leaderboard</a></li>
+                    <li><NavLink to="index">Home</NavLink></li>
+                    <li><NavLink to="game">Game</NavLink></li>
+                    <li><NavLink to="instructions">Instructions</NavLink></li>
+                    <li><NavLink to="leaderboard">Leaderboard</NavLink></li>
                 </ul>
             </nav>
         </header>
@@ -40,4 +40,8 @@ export default function App() {
     </BrowserRouter>
 
   )
+}
+
+function NotFound() {
+  return <main className="container-fluid bg-secondary text-center">404: Return to sender. Address unknown.</main>;
 }
