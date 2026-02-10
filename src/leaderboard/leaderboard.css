@@ -57,28 +57,29 @@ body {
 
 
 /* Style the main content */
-main {
+.leaderboard-page {
   display: flex;
   flex-direction: column; /* put leaderboard title on top of the leaderboard */ 
   align-items: center; /* center everything in the chart */
   justify-content: center; /* center everything vertically */
   padding: 48px 16px; /* space out title from the header and chart from the sides */
   gap: 24px; /* space between title and chart */
+  margin-top: -150px; /* move leaderboard up without affecting other pages */
 }
 
 /* style the leaderboard title */
-main h2 {
+.leaderboard-page h2 {
   font-size: 2rem; /* make title bigger */
   color: #f8f8f8; /* make title white */
 }
 
 /* stylized leaderboard table */
-section {
+.leaderboard-page section {
   width: 100%; /*width of chart*/
   max-width: 600px; /* make sure it doesn't go too big */
 }
 /* style the actual table */
-table {
+.leaderboard-page table {
   width: 100%; /* make table go full width of the area */
   background-color: rgba(128,128,128,0.15); /* modify the background color of the chart */
   border-radius: 12px; /* round edges of the bottom */
@@ -87,7 +88,7 @@ table {
 }
 
 /* header row styling */
-table th {
+.leaderboard-page table th {
   background-color: #0f3f76; /* darker blue for header row */
   color: #f8f8f8; /* make header text white */
   padding: 14px 16px; /* make the header bigger */
@@ -95,7 +96,7 @@ table th {
 }
 
 /* data cell styling */
-table td {
+.leaderboard-page table td {
   padding: 12px 16px; /* space out table cells */
   text-align: center;
   color: #f8f8f8; /* make the text white */
@@ -103,12 +104,12 @@ table td {
 }
 
 /* change color when hovering over a row */
-table tr:hover {
+.leaderboard-page table tr:hover {
   background-color: rgba(255,255,255,0.08);
 }
 
 /* styling for the position column */
-table td:first-child {
+.leaderboard-page table td:first-child {
   font-weight: 600;
   color: #fff;
 }
