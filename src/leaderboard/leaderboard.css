@@ -9,6 +9,8 @@ header {
   justify-content: space-around; /*space out title and links */
   background-color: #002b5c; /* darker blue than body */
   color: #e8e8e8; /* make the text white */
+  position: relative; /* keep header above page content */
+  z-index: 2;
 }
 
 header nav ul {
@@ -65,6 +67,8 @@ body {
   padding: 48px 16px; /* space out title from the header and chart from the sides */
   gap: 24px; /* space between title and chart */
   margin-top: -150px; /* move leaderboard up without affecting other pages */
+  position: relative;
+  z-index: 1;
 }
 
 /* style the leaderboard title */
