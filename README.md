@@ -86,9 +86,9 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Bundled using Vite** - I did not complete this part of the deliverable.
-- [ ] **Components** - I did not complete this part of the deliverable.
-- [ ] **Router** - I did not complete this part of the deliverable.
+- [x] **Bundled using Vite** - I successfully configured Vite to bundle the React project.
+- [x] **Components** - I refactored the application into reusable React components.
+- [x] **Router** - I implemented React Router to handle navigation between pages within the application.
 
 ## 🚀 React part 2: Reactivity deliverable
 
