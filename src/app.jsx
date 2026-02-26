@@ -67,7 +67,7 @@ export default function App() {
               />
             }
           />
-          <Route path="/game" element = {<Game />}/>
+          <Route path="/game" element = {<Game userName={userName} />}/> {/* give the game the current user name to display on the page */}
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/instructions" element={<Instructions />} />
           <Route path="*" element={<NotFound />} />

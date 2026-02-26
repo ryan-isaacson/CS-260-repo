@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './game.css';
 
 // full game functionality
-export function Game() {
+export function Game({ userName }) { // get the username to use on the page
     const [gameStarted, setGameStarted] = useState(false); // automatically set the game to not started
 
     const handleStartGame = () => { // function to start the game when the button is clicked
@@ -12,7 +12,7 @@ export function Game() {
   return (
     <main>
         <div className="info-bar">
-            <span className="username">Username: AwesomeDude</span>
+            <span className="username">Username: {userName}</span> {/* show the current username in the info bar */}
             <span className="time">Time Left: 24s</span>
             <span className="score">Score: 8</span>
         </div>
