@@ -47,6 +47,7 @@ export function Login({ userName, authState, onAuthChange }) {
     const saved = JSON.parse(stored); // convert JSON string back into an object
 
     if (saved.email === email && saved.password === password) { // compare input to saved data
+      setMessage(''); // clear any previous messages after logging in
       localStorage.setItem(AUTH_USER_KEY, email); // store the logged in user for future visits
       onAuthChange(email, AuthState.Authenticated); // update auth state
     } 
