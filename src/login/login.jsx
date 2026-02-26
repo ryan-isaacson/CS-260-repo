@@ -1,15 +1,109 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { AUTH_USER_KEY, AuthState } from '../app'; // Use AUTH_USER_KEY and AuthState from app.jsx
 
-export function Login() {
+const REGISTERED_USER_KEY = 'ctf_registered_user'; // - REGISTERED_USER_KEY stores the saved email + password
+
+// the full login page
+export function Login({ userName, authState, onAuthChange }) {
+  const [email, setEmail] = useState(''); // track the email input value
+  const [password, setPassword] = useState(''); // track the password input value
+  const [message, setMessage] = useState(''); // show feedback messages to the user
+
+
+  // Helper function to make sure email and password input is valid
+  const hasValidInput = () => {
+    if (!email && !password) {
+      setMessage('Email and password are required.');
+      return false; // return false if it's invalid
+    }
+    return true; // return true if it's valid
+  };
+
+
+  // Register function - Save email/password to localStorage
+  const handleRegister = () => {
+    if (!hasValidInput()) {
+      return; // if there's no input then don't do anything
+    }
+    // store the login info in localStorage
+    const validLogin = { email, password };
+    localStorage.setItem(REGISTERED_USER_KEY, JSON.stringify(validLogin));
+    setMessage('Registration saved. You can now log in.');
+  };
+
+
+  // Login function
+  const handleLogin = () => {
+    if (!hasValidInput()) {
+      return; // if there's no input then don't do anything
+    }
+
+    const stored = localStorage.getItem(REGISTERED_USER_KEY); // check saved login info
+    if (!stored) { // if the login info isn't there tell the user to register
+      setMessage('No account found. Please register first.');
+      return;
+    }
+
+    const saved = JSON.parse(stored); // convert JSON string back into an object
+
+    if (saved.email === email && saved.password === password) { // compare input to saved data
+      localStorage.setItem(AUTH_USER_KEY, email); // store the logged in user for future visits
+      onAuthChange(email, AuthState.Authenticated); // update auth state
+    } 
+    else { // login isn't right
+      setMessage('Incorrect email or password.');
+    }
+  };
+
+
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem(AUTH_USER_KEY); // remove the logged in user from storage
+    onAuthChange('', AuthState.Unauthenticated); // change the auth state to be logged out
+  };
+
   return (
     <main className="home-main">
         <h1>Login</h1>
-        <div><input type="email" placeholder="Email"/></div>
-        <div><input type="password" placeholder="Password"/></div>
-        <div className="button-row">
-            <button type="submit">Login</button>
-            <button type="submit">Register</button>
-        </div>
+
+        {/* show a welcome message and a logout button when logged in*/}
+        {authState === AuthState.Authenticated && ( // only show this block when logged in.
+          <div className="auth-panel">
+            <p>Logged in as {userName}</p> {/* display the current user name. */}
+            <div className="button-row">
+              <button type="button" onClick={handleLogout}>Logout</button> {/* logout button */}
+            </div>
+          </div>
+        )}
+
+        {/* show the register and login buttons when logged out */}
+        {authState === AuthState.Unauthenticated && ( // only show this when logged out
+          <div className="auth-panel">
+            <div>
+              <input
+                type="email"
+                placeholder="Email" // the input box shows "email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)} // update when the user enters new input
+              />
+            </div>
+            <div>
+              <input
+                type="password" // password type hides characters.
+                placeholder="Password" // the input box shows "password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)} // NOTE: Update state when user types.
+              />
+            </div>
+            <div className="button-row">
+              <button type="button" onClick={handleLogin}>Login</button> {/* try to login */}
+              <button type="button" onClick={handleRegister}>Register</button> {/* save registration */}
+            </div>
+          </div>
+        )}
+
+
+        {message && <p className="status-message">{message}</p>} {/* show error messages */}
     </main>
   );
 }

@@ -123,3 +123,17 @@ main button {
 main button:hover {
   background-color: #0f3f76; /* darker blue on hover/focus */
 }
+
+/* make spacing for messages and panels */
+.auth-panel {
+  display: flex;
+  flex-direction: column; /* stack items vertically. */
+  gap: 12px; /* add spacing between items. */
+  align-items: center; /* center items horizontally. */
+}
+
+/* feedback text area for error messages. */
+.status-message { 
+  margin-top: 8px; /* add space above the message. */
+  color: #fff3c2; /* use a warm color */
+}
