@@ -77,6 +77,18 @@ body {
   background-color: #1658a2;
 }
 
+/* style the game over text */
+.game-over-text {
+  position: absolute; /* make sure it's where it's supposed to be */
+  top: 50%; /* center game over text vertically */
+  left: 50%; /* center game over text horizontally */
+  transform: translate(-50%, -50%); /* adjust for text size */
+  color: #e8e8e8; /* make the text white */
+  font-weight: 600; /* make it bold */
+  text-align: center; /* center align text */
+  z-index: 3; /* make sure game over text is above fish layer */
+}
+
 /* layer for the fish buttons */
 .fish-layer {
   position: fixed; /* make sure the fish stay in place */
