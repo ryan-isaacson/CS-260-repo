@@ -85,6 +85,7 @@ export function Game({ userName }) { // get the username to use on the page
         {gameOver && (
             <div className="game-over-text">
                 <p>Game Over!  Your score: {score}</p>
+                <button type="button" onClick={handleStartGame}>New Game</button>
             </div>
         )}
     </main>

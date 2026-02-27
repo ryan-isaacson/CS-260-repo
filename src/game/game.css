@@ -89,6 +89,11 @@ body {
   z-index: 3; /* make sure game over text is above fish layer */
 }
 
+/* style the new game button that appears when the game is over */
+.game-over-text button {
+  margin-top: 16px; /* space between score and button */
+}
+
 /* layer for the fish buttons */
 .fish-layer {
   position: fixed; /* make sure the fish stay in place */
