@@ -116,5 +116,6 @@ body {
 
 /* hover effect for fish buttons */
 .fish-button:hover {
-  transform: translate(-50%, -50%) scale(1.05);
+  transform: translate(-50%, -50%) scale(1.05); /* make the fish a little bigger when hovered */
+  background: transparent; /* keep the background invisible when hovered */
 }

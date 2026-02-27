@@ -5,13 +5,18 @@ import './game.css';
 export function Game({ userName }) { // get the username to use on the page
     const [gameStarted, setGameStarted] = useState(false); // automatically set the game to not started
     const [timeLeft, setTimeLeft] = useState(30); // initialize the time to 30 seconds
-    const [score] = useState(0); // prep score for implementation later
+    const [score, setScore] = useState(0); // keep track of player score
 
     const gameOver = gameStarted && timeLeft === 0;
 
     const handleStartGame = () => { // function to start the game when the button is clicked
         setTimeLeft(30); // reset the time to 30 seconds at the start of each game
+        setScore(0); // reset score when a new game starts
         setGameStarted(true);
+    };
+
+    const handleFishClick = () => { // function for clicking on a fish
+        setScore((currentScore) => currentScore + 1); // increase the score by 1 each time a fish is clicked on
     };
 
     // function to handle the game timer
@@ -46,32 +51,32 @@ export function Game({ userName }) { // get the username to use on the page
         </div>
         {!gameStarted && <button className="start-button" onClick={handleStartGame}>Start Game</button>} {/* only show the start button if the game hasn't started yet */}
         {gameStarted && !gameOver && <div className="fish-layer"> {/* only show the fish while the game is active */}
-            <button className="fish-button" style={{ "--x": 10, "--y": 20 }}>
+            <button className="fish-button" style={{ "--x": 10, "--y": 20 }} onClick={handleFishClick}>
                 <svg width="75" height="75">
                     <text x="-5" y="70" fontSize="80">🐟</text>
                 </svg>
             </button>
-            <button className="fish-button" style={{ "--x": 55, "--y": 25 }}>
+            <button className="fish-button" style={{ "--x": 55, "--y": 25 }} onClick={handleFishClick}>
                 <svg width="75" height="75">
                     <text x="-5" y="70" fontSize="80">🐟</text>
                 </svg>
                 </button>
-            <button className="fish-button" style={{ "--x": 85, "--y": 15 }}>
+            <button className="fish-button" style={{ "--x": 85, "--y": 15 }} onClick={handleFishClick}>
                 <svg width="75" height="75">
                     <text x="-5" y="70" fontSize="80">🐟</text>
                 </svg>
             </button>
-            <button className="fish-button" style={{ "--x": 20, "--y": 60 }}>
+            <button className="fish-button" style={{ "--x": 20, "--y": 60 }} onClick={handleFishClick}>
                 <svg width="75" height="75">
                     <text x="-5" y="70" fontSize="80">🐟</text>
                 </svg>
             </button>
-            <button className="fish-button" style={{ "--x": 45, "--y": 90 }}>
+            <button className="fish-button" style={{ "--x": 45, "--y": 90 }} onClick={handleFishClick}>
                 <svg width="75" height="75">
                     <text x="-5" y="70" fontSize="80">🐟</text>
                 </svg>
             </button>
-            <button className="fish-button" style={{ "--x": 75, "--y": 70 }}>
+            <button className="fish-button" style={{ "--x": 75, "--y": 70 }} onClick={handleFishClick}>
                 <svg width="75" height="75">
                     <text x="-5" y="70" fontSize="80">🐟</text>
                 </svg>
