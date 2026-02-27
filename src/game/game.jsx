@@ -3,6 +3,7 @@ import './game.css';
 
 const INITIAL_FISH_COUNT = 5; // initialize the number of fish to start the game with
 const MAX_FISH_COUNT = 20; // maximum number of fish allowed on the screen
+const LEADERBOARD_STORAGE_KEY = 'ctf_leaderboard_scores'; // initialize the variable for the leaderboard scores
 
 // helper function to create a new fish with a unique id and random position
 function createFish(id) {
@@ -20,6 +21,7 @@ export function Game({ userName }) { // get the username to use on the page
     const [score, setScore] = useState(0); // keep track of player score
     const [fish, setFish] = useState([]); // keep track of fish currently on screen
     const fishIdCounter = useRef(0); // make a fishIdCounter function to keep track of the next unique fish id to use
+    const didSaveScore = useRef(false); // make a didSaveScore function to make sure we only save the score once per game over
 
     const gameOver = gameStarted && timeLeft === 0;
 
@@ -33,6 +35,7 @@ export function Game({ userName }) { // get the username to use on the page
         setTimeLeft(30); // reset the time to 30 seconds at the start of each game
         setScore(0); // reset score when a new game starts
         fishIdCounter.current = 0; // reset the fish id counter for each new game
+        didSaveScore.current = false; // reset the score saved flag for each new game
         setFish(Array.from({ length: INITIAL_FISH_COUNT }, () => makeFishWithNewId())); // create the initial fish for the game
         setGameStarted(true);
     };
@@ -61,7 +64,7 @@ export function Game({ userName }) { // get the username to use on the page
         return () => clearInterval(timerId); // make sure the timer restarts and clears
     }, [gameStarted, timeLeft]);
 
-    // function to spawn new fish every 0.5s while the game is active
+    // function to spawn new fish every 0.75s while the game is active
     useEffect(() => {
         if (!gameStarted || gameOver) { // if the game isn't started or is over don't spawn new fish
             return;
@@ -78,6 +81,61 @@ export function Game({ userName }) { // get the username to use on the page
 
         return () => clearInterval(spawnId); // clear the spawn timer when the game ends or restarts
     }, [gameStarted, gameOver]); // the spawn timer depends on whether the game has started and whether it's over
+
+    // Save final score to local leaderboard at game-over time.
+    //
+    // Trigger condition:
+    // - gameOver is true
+    // - and we have NOT already saved this round (didSaveScore.current is false)
+    //
+    // Steps:
+    // 1) Build one leaderboard entry from current user, score, and date
+    // 2) Load existing local scores
+    // 3) Append new entry
+    // 4) Sort by score DESC, tie-break by timestamp ASC
+    // 5) Keep top 10 only
+    // 6) Save back to localStorage
+    // 7) Flip guard to true so this round is saved only once
+    //
+    // PSEUDOCODE:
+    // IF not gameOver OR alreadySaved THEN return
+    // entry = {name, score, date, timestamp}
+    // existing = read localStorage list or []
+    // combined = existing + entry
+    // ranked = sort combined by score descending, tie by timestamp ascending
+    // topTen = ranked.slice(0, 10)
+    // write topTen to localStorage
+    // alreadySaved = true
+
+    // function to save the score when the game is over
+    useEffect(() => {
+        if (!gameOver || didSaveScore.current) { // if the game isn't over or we've already saved the score for this game over, don't do anything
+            return;
+        }
+
+        // build the leaderboard entry for this score
+        const entry = { 
+            name: userName || 'Player',
+            score,
+            date: new Date().toLocaleDateString(),
+            timestamp: Date.now(),
+        };
+
+        const stored = localStorage.getItem(LEADERBOARD_STORAGE_KEY); // get the previously saved scores from localStorage
+        const existingScores = stored ? JSON.parse(stored) : []; // read the scores or use an empty array if there are none
+
+        const nextScores = [...existingScores, entry] // combine the existing scores with the new entry and sort them by score
+            .sort((a, b) => { // sort the scores
+                if (b.score !== a.score) {
+                    return b.score - a.score;
+                }
+                return a.timestamp - b.timestamp; // if there's a tie the higher place goes to the one with the earlier timestamp
+            })
+            .slice(0, 10); // keep only the top 10 scores
+
+        localStorage.setItem(LEADERBOARD_STORAGE_KEY, JSON.stringify(nextScores)); // save the updated leaderboard back to localStorage
+        didSaveScore.current = true; // mark the score as saved for this game once over
+    }, [gameOver, score, userName]); // make leaderboard entry
 
   return (
     <main>
