@@ -10,10 +10,10 @@ body {
   display: flex;
   flex-direction: column; /* put leaderboard title on top of the leaderboard */ 
   align-items: center; /* center everything in the chart */
-  justify-content: center; /* center everything vertically */
-  padding: 48px 16px; /* space out title from the header and chart from the sides */
+  justify-content: flex-start; /* keep leaderboard anchored near the top */
+  padding: 48px 16px 96px; /* keep space under header and above fixed footer */
   gap: 24px; /* space between title and chart */
-  margin-top: -150px; /* move leaderboard up without affecting other pages */
+  margin-top: 0; /* remove default margin */
   position: relative;
   z-index: 1;
 }
