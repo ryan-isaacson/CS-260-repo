@@ -20,10 +20,12 @@ export function Game({ userName }) { // get the username to use on the page
     const [timeLeft, setTimeLeft] = useState(30); // initialize the time to 30 seconds
     const [score, setScore] = useState(0); // keep track of player score
     const [fish, setFish] = useState([]); // keep track of fish currently on screen
+    const [feedMessages, setFeedMessages] = useState([]); // keep track of game feed notifications
     const fishIdCounter = useRef(0); // make a fishIdCounter function to keep track of the next unique fish id to use
     const didSaveScore = useRef(false); // make a didSaveScore function to make sure we only save the score once per game over
 
     const gameOver = gameStarted && timeLeft === 0;
+    const playerName = userName || 'Player'; // make a playerName variable to use elsewhere
 
     const makeFishWithNewId = () => { // helper function to create a new fish with a unique id
         const fishId = fishIdCounter.current; // get the current fish id from the counter
@@ -36,6 +38,7 @@ export function Game({ userName }) { // get the username to use on the page
         setScore(0); // reset score when a new game starts
         fishIdCounter.current = 0; // reset the fish id counter for each new game
         didSaveScore.current = false; // reset the score saved flag for each new game
+        setFeedMessages((currentMessages) => [...currentMessages, `${playerName} started a new game`].slice(-8)); // add start game message and keep only the last 8 notifications
         setFish(Array.from({ length: INITIAL_FISH_COUNT }, () => makeFishWithNewId())); // create the initial fish for the game
         setGameStarted(true);
     };
@@ -82,30 +85,6 @@ export function Game({ userName }) { // get the username to use on the page
         return () => clearInterval(spawnId); // clear the spawn timer when the game ends or restarts
     }, [gameStarted, gameOver]); // the spawn timer depends on whether the game has started and whether it's over
 
-    // Save final score to local leaderboard at game-over time.
-    //
-    // Trigger condition:
-    // - gameOver is true
-    // - and we have NOT already saved this round (didSaveScore.current is false)
-    //
-    // Steps:
-    // 1) Build one leaderboard entry from current user, score, and date
-    // 2) Load existing local scores
-    // 3) Append new entry
-    // 4) Sort by score DESC, tie-break by timestamp ASC
-    // 5) Keep top 10 only
-    // 6) Save back to localStorage
-    // 7) Flip guard to true so this round is saved only once
-    //
-    // PSEUDOCODE:
-    // IF not gameOver OR alreadySaved THEN return
-    // entry = {name, score, date, timestamp}
-    // existing = read localStorage list or []
-    // combined = existing + entry
-    // ranked = sort combined by score descending, tie by timestamp ascending
-    // topTen = ranked.slice(0, 10)
-    // write topTen to localStorage
-    // alreadySaved = true
 
     // function to save the score when the game is over
     useEffect(() => {
@@ -115,7 +94,7 @@ export function Game({ userName }) { // get the username to use on the page
 
         // build the leaderboard entry for this score
         const entry = { 
-            name: userName || 'Player',
+            name: playerName,
             score,
             date: new Date().toLocaleDateString(),
             timestamp: Date.now(),
@@ -134,8 +113,9 @@ export function Game({ userName }) { // get the username to use on the page
             .slice(0, 10); // keep only the top 10 scores
 
         localStorage.setItem(LEADERBOARD_STORAGE_KEY, JSON.stringify(nextScores)); // save the updated leaderboard back to localStorage
+        setFeedMessages((currentMessages) => [...currentMessages, `${playerName} ended the game with ${score} points`].slice(-8)); // add end-game message and keep only the latest 8
         didSaveScore.current = true; // mark the score as saved for this game once over
-    }, [gameOver, score, userName]); // make leaderboard entry
+    }, [gameOver, playerName, score]); // make leaderboard entry
 
   return (
     <main>
@@ -145,8 +125,9 @@ export function Game({ userName }) { // get the username to use on the page
             <span className="score">Score: {score}</span> {/* show the current score in the info bar */}
         </div>
         <div className="game-feed">
-            <p>Bob just finished a game with a score of: 52</p>
-            <p>Dave just finished a game with a score of: 37</p>
+            {feedMessages.map((message, index) => ( // show the game feed messages in the game feed section
+                <p key={`${index}-${message}`}>{message}</p>
+            ))}
         </div>
         {!gameStarted && <button className="start-button" onClick={handleStartGame}>Start Game</button>} {/* only show the start button if the game hasn't started yet */}
         {gameStarted && !gameOver && <div className="fish-layer"> {/* only show the fish while the game is active */}
