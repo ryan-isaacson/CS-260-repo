@@ -58,28 +58,18 @@ Bootstrap is cool, it's very nice on a surface level application to do things ea
 
 Setting up Vite and React was pretty simple. I had a bit of trouble because of conflicting CSS. This isn't as straight forward as you would find with Svelte or Vue, but I made it work in the end. If there was a ton of CSS it would be a real problem. It sure was nice to have the code structured in a more usable way.
 
+
 ## React Part 2: Reactivity
 
-This was a lot of fun to see it all come together. I had to keep remembering to use React state instead of just manipulating the DOM directly.
+Adding reactivity was really hard, especially the login for some reason
 
-Handling the toggling of the checkboxes was particularly interesting.
+The biggest thing I learned was to let state control what is shown on the screen. Instead of writing code that directly edits elements, I update state and React re-renders the page correctly.
 
-```jsx
-<div className="input-group sound-button-container">
-  {calmSoundTypes.map((sound, index) => (
-    <div key={index} className="form-check form-switch">
-      <input
-        className="form-check-input"
-        type="checkbox"
-        value={sound}
-        id={sound}
-        onChange={() => togglePlay(sound)}
-        checked={selectedSounds.includes(sound)}
-      ></input>
-      <label className="form-check-label" htmlFor={sound}>
-        {sound}
-      </label>
-    </div>
-  ))}
-</div>
-```
+Some of the reactivity things I used:
+
+- "useState" for functions like "timeLeft", "score", "fish", and feed messages.
+- "useEffect" for timers like the game countdown and the timer for spawning fish
+-  made it so React only shows the start button, fish, or game over text at the right time.
+- use localStorage to make it so when a game ends the score updates the leaderboard right away.
+
+One thing that helped me was seeing how one state update can affect different parts of the page at the same time. For example when time reaches 0 it hides the fish, shows game over text, and saves the score to the leaderboard.
