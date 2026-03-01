@@ -94,9 +94,6 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **All functionality implemented or mocked out** - I did not complete this part of the deliverable.
-- [ ] **Hooks** - I did not complete this part of the deliverable.
-
 - [x] **All functionality implemented or mocked out** - THE GAME WORKS!!! When you click a fish it adds +1 to the score. The 30 second timer to end the game works. The fish spawn and get removed when you click them correctly. The leaderboard tracks the users scores. It's beautiful.
 - [x] **Hooks** - I used React hooks useState, useEffect, and useRef to manage things like the timer and spawning fish.
 
