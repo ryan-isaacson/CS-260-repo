@@ -93,6 +93,8 @@ app.get('/api/scores', (req, res) => { // score read endpoint for frontend score
 });
 
 app.post('/api/score', (req, res) => { // submit a new score entry
+	const token = req.cookies[authCookieName]; // read auth token from cookie
+	const session = token ? sessions.get(token) : undefined; // look up session using token if present
 	const { name, score } = req.body; // pull score payload fields from request body
 
 	if (!name || typeof score !== 'number') { // validate required score payload shape

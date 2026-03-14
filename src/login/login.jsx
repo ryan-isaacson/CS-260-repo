@@ -20,15 +20,31 @@ export function Login({ userName, authState, onAuthChange }) {
   };
 
 
-  // Register function - Save email/password to localStorage
-  const handleRegister = () => {
+  // Register function - create account through backend api
+  const handleRegister = async () => { // make this async so we can wait for fetch response
     if (!hasValidInput()) {
       return; // if there's no input then don't do anything
     }
-    // store the login info in localStorage
-    const validLogin = { email, password };
-    localStorage.setItem(REGISTERED_USER_KEY, JSON.stringify(validLogin));
-    setMessage('Registration saved. You can now log in.');
+
+    try { // try to call the backend register endpoint
+      const response = await fetch('/api/auth/create', { // send registration data to backend
+        method: 'POST', // use post because we are creating a new account
+        headers: { 'Content-Type': 'application/json' }, // tell backend we are sending json
+        body: JSON.stringify({ email, password }), // include email and password in request body
+      });
+
+      const result = await response.json(); // parse backend response json
+
+      if (response.status === 201) { // account was created successfully
+        setMessage('Registration complete. You can now log in.'); // show success message
+      } else if (response.status === 409 || response.status === 400) { // handle duplicate user or bad input
+        setMessage(result.message || 'Registration failed.'); // show backend error message when available
+      } else { // fallback for any other unexpected status code
+        setMessage(result.message || 'Unexpected error during registration.'); // show fallback error message
+      }
+    } catch (error) { // catch network errors or server connection issues
+      setMessage('Unable to reach server. Please try again.'); // tell user the server request failed
+    }
   };
 
 
