@@ -10,11 +10,11 @@ const users = []; // temporary user storage in memory (resets on restart)
 const sessions = new Map(); // temporary session storage mapping tokens to session info
 const scores = []; // temporary score storage in memory
 const authCookieName = 'token'; // name of the cookie used for auth session token
+const fishTopics = ['Salmon', 'Clownfish', 'Tuna', 'Swordfish', 'Manta ray']; // types of fish for the random fish facts
 
 app.use(express.json()); // parse incoming json bodies into req.body
 app.use(cookieParser()); // parse incoming cookies so session/auth cookies are readable
 app.use(express.static('public')); // serve static files from public for deployment
-
 
 app.post('/api/auth/create', async (req, res) => { // create account endpoint for new users
 	const { email, password } = req.body; // pull email and password
@@ -33,7 +33,6 @@ app.post('/api/auth/create', async (req, res) => { // create account endpoint fo
 
 	return res.status(201).json({ email }); // return created status and basic user info
 });
-
 
 app.post('/api/auth/login', async (req, res) => { // login endpoint for existing users
 	const { email, password } = req.body; // pull login credentials from request body
@@ -59,7 +58,6 @@ app.post('/api/auth/login', async (req, res) => { // login endpoint for existing
 	return res.status(200).json({ email }); // return success and basic user info
 });
 
-
 app.delete('/api/auth/logout', (req, res) => { // logout endpoint for signed in users
 	const token = req.cookies[authCookieName]; // read current auth token from cookie
 
@@ -70,7 +68,6 @@ app.delete('/api/auth/logout', (req, res) => { // logout endpoint for signed in 
 	res.clearCookie(authCookieName); // clear auth cookie in browser
 	return res.status(200).json({ message: 'logged out' }); // return success response for logout
 });
-
 
 app.get('/api/user/:email', (req, res) => { // user lookup endpoint for frontend auth checks
 	const requestedEmail = req.params.email; // read target email from route parameters
@@ -87,14 +84,33 @@ app.get('/api/user/:email', (req, res) => { // user lookup endpoint for frontend
 	return res.status(200).json({ email: user.email, authenticated }); // return user email and whether this request is authenticated
 });
 
-
 app.get('/api/scores', (req, res) => { // score read endpoint for frontend score data
 	return res.status(200).json(scores); // return all current scores from in-memory storage
 });
 
+app.get('/api/fish-fact', async (req, res) => { // return a random fish fact from a third-party endpoint
+	const randomTopic = fishTopics[Math.floor(Math.random() * fishTopics.length)]; // choose a random fish topic for variety
+
+	try { // try getting a real fact from wikipedia
+		const response = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(randomTopic)}`); // call wikipedia summary endpoint
+
+		if (!response.ok) { // if wikipedia fails, jump to fallback response
+			throw new Error('failed third-party request'); // force catch block on bad status codes
+		}
+
+		const data = await response.json(); // convert wikipedia response into json object
+		const fact = data.extract || `Fish fact: ${randomTopic} are important ocean species.`; // use summary text when available
+
+		return res.status(200).json({ topic: randomTopic, fact }); // return topic and fact to the frontend
+	} catch { // fallback if third-party request fails for any reason
+		return res.status(200).json({
+			topic: randomTopic, // still send the random topic we selected
+			fact: `Fish fact: ${randomTopic} are fascinating ocean animals found in waters around the world.`, // fallback fact text so UI still has data
+		});
+	}
+});
+
 app.post('/api/score', (req, res) => { // submit a new score entry
-	const token = req.cookies[authCookieName]; // read auth token from cookie
-	const session = token ? sessions.get(token) : undefined; // look up session using token if present
 	const { name, score } = req.body; // pull score payload fields from request body
 
 	if (!name || typeof score !== 'number') { // validate required score payload shape
