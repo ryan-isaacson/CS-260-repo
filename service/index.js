@@ -87,6 +87,24 @@ app.get('/api/user/:email', (req, res) => { // user lookup endpoint for frontend
 	return res.status(200).json({ email: user.email, authenticated }); // return user email and whether this request is authenticated
 });
 
+
+app.get('/api/scores', (req, res) => { // score read endpoint for frontend score data
+	return res.status(200).json(scores); // return all current scores from in-memory storage
+});
+
+app.post('/api/score', (req, res) => { // submit a new score entry
+	const { name, score } = req.body; // pull score payload fields from request body
+
+	if (!name || typeof score !== 'number') { // validate required score payload shape
+		return res.status(400).json({ message: 'name and numeric score are required' }); // return bad request for invalid payload
+	}
+
+	const scoreEntry = { name, score, date: new Date().toISOString() }; // build score object with timestamp
+	scores.push(scoreEntry); // add score entry into in-memory score storage
+
+	return res.status(201).json(scoreEntry); // return created score entry
+});
+
 app.listen(port, () => {
 	console.log(`Listening on port ${port}`); // log the port so I know the server started
 });
