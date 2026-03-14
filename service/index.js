@@ -12,6 +12,10 @@ const scores = []; // temporary score storage in memory
 const authCookieName = 'token'; // name of the cookie used for auth session token
 const fishTopics = ['Salmon', 'Clownfish', 'Tuna', 'Swordfish', 'Manta ray']; // types of fish for the random fish facts
 
+function getRandomItem(items) {
+	return items[Math.floor(Math.random() * items.length)]; // return one random entry from the provided array
+} // helper to pick one random item from an array
+
 app.use(express.json()); // parse incoming json bodies into req.body
 app.use(cookieParser()); // parse incoming cookies so session/auth cookies are readable
 app.use(express.static('public')); // serve static files from public for deployment
@@ -88,24 +92,31 @@ app.get('/api/scores', (req, res) => { // score read endpoint for frontend score
 	return res.status(200).json(scores); // return all current scores from in-memory storage
 });
 
-app.get('/api/fish-fact', async (req, res) => { // return a random fish fact from a third-party endpoint
+app.get('/api/fish-fact', async (req, res) => { // return a random fish fact directly from api
 	const randomTopic = fishTopics[Math.floor(Math.random() * fishTopics.length)]; // choose a random fish topic for variety
 
 	try { // try getting a real fact from wikipedia
 		const response = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(randomTopic)}`); // call wikipedia summary endpoint
 
-		if (!response.ok) { // if wikipedia fails, jump to fallback response
-			throw new Error('failed third-party request'); // force catch block on bad status codes
+		if (!response.ok) { // if wikipedia fails, use fallback message
+			throw new Error('failed third-party request'); // force catch block when third-party status is not successful
 		}
 
 		const data = await response.json(); // convert wikipedia response into json object
-		const fact = data.extract || `Fish fact: ${randomTopic} are important ocean species.`; // use summary text when available
+		const wikiSentences = (data.extract || '')
+			.split(/(?<=[.!?])\s+/) // split summary text into sentence chunks using punctuation boundaries
+			.map((sentence) => sentence.trim()) // remove extra spaces from each sentence chunk
+			.filter((sentence) => sentence.length > 25); // split summary into shorter fact options
 
-		return res.status(200).json({ topic: randomTopic, fact }); // return topic and fact to the frontend
+		const fact = wikiSentences.length > 0
+			? getRandomItem(wikiSentences) // choose one random sentence if we found sentence chunks
+			: (data.extract || `Fish fact: ${randomTopic} are fascinating ocean animals found in waters around the world.`); // choose a random sentence from api text
+
+		return res.status(200).json({ topic: randomTopic, fact }); // return topic and randomized api fact to frontend
 	} catch { // fallback if third-party request fails for any reason
 		return res.status(200).json({
-			topic: randomTopic, // still send the random topic we selected
-			fact: `Fish fact: ${randomTopic} are fascinating ocean animals found in waters around the world.`, // fallback fact text so UI still has data
+			topic: randomTopic, // include which fish topic this fact belongs to
+			fact: `Fish fact: ${randomTopic} are fascinating ocean animals found in waters around the world.`, // fallback fact text so the frontend always has something to show
 		});
 	}
 });

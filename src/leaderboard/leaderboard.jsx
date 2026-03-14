@@ -7,6 +7,16 @@ export function Leaderboard() {
     const [scores, setScores] = useState([]); // initialize scores as an empty array
     const [loadMessage, setLoadMessage] = useState(''); // track leaderboard load errors for user feedback
 
+    const formatDisplayDate = (value) => { // helper function to show clean readable date text
+        const parsedDate = new Date(value); // convert stored date value into Date object
+
+        if (Number.isNaN(parsedDate.getTime())) { // if date cannot be parsed, return original value
+            return value || ''; // fallback to original text or blank string
+        }
+
+        return parsedDate.toLocaleDateString(); // display local date
+    };
+
     useEffect(() => {
         const loadScoresFromApi = async () => { // helper to load leaderboard scores from backend api
             try { // try requesting leaderboard score data from backend service
@@ -74,7 +84,7 @@ export function Leaderboard() {
                                     <td>{index + 1}</td> 
                                     <td>{entry.name}</td> 
                                     <td>{entry.score}</td>
-                                    <td>{entry.date}</td>
+                                    <td>{formatDisplayDate(entry.date)}</td>
                                 </tr>
                             ))
                         )}
