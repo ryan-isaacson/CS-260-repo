@@ -3,7 +3,6 @@ import './game.css';
 
 const INITIAL_FISH_COUNT = 5; // initialize the number of fish to start the game with
 const MAX_FISH_COUNT = 20; // maximum number of fish allowed on the screen
-const LEADERBOARD_STORAGE_KEY = 'ctf_leaderboard_scores'; // initialize the variable for the leaderboard scores
 
 // helper function to create a new fish with a unique id and random position
 function createFish(id) {
@@ -92,29 +91,29 @@ export function Game({ userName }) { // get the username to use on the page
             return;
         }
 
-        // build the leaderboard entry for this score
-        const entry = { 
-            name: playerName,
-            score,
-            date: new Date().toLocaleDateString(),
-            timestamp: Date.now(),
+        didSaveScore.current = true; // mark score as handled immediately so this only runs once
+
+        const saveScoreToApi = async () => { // helper to submit game score to backend endpoint
+            try { // try posting score to backend service
+                const response = await fetch('/api/score', { // send score payload to protected score endpoint
+                    method: 'POST', // use post because we are creating a new score entry
+                    headers: { 'Content-Type': 'application/json' }, // tell backend request body is json
+                    body: JSON.stringify({ name: playerName, score }), // include player name and score in payload
+                });
+
+                if (response.status === 201) { // score save succeeded on backend
+                    setFeedMessages((currentMessages) => [...currentMessages, `${playerName} ended the game with ${score} points`].slice(-8)); // add successful end-game message and keep latest 8
+                }
+                else { // handle any other unexpected backend response status
+                    setFeedMessages((currentMessages) => [...currentMessages, 'Score save failed'].slice(-8)); // show generic score save failure message
+                }
+            } 
+            catch (error) { // catch network/server errors when posting score
+                setFeedMessages((currentMessages) => [...currentMessages, 'Unable to reach server to save score'].slice(-8)); // show network failure message
+            }
         };
 
-        const stored = localStorage.getItem(LEADERBOARD_STORAGE_KEY); // get the previously saved scores from localStorage
-        const existingScores = stored ? JSON.parse(stored) : []; // read the scores or use an empty array if there are none
-
-        const nextScores = [...existingScores, entry] // combine the existing scores with the new entry and sort them by score
-            .sort((a, b) => { // sort the scores
-                if (b.score !== a.score) {
-                    return b.score - a.score;
-                }
-                return a.timestamp - b.timestamp; // if there's a tie the higher place goes to the one with the earlier timestamp
-            })
-            .slice(0, 10); // keep only the top 10 scores
-
-        localStorage.setItem(LEADERBOARD_STORAGE_KEY, JSON.stringify(nextScores)); // save the updated leaderboard back to localStorage
-        setFeedMessages((currentMessages) => [...currentMessages, `${playerName} ended the game with ${score} points`].slice(-8)); // add end-game message and keep only the latest 8
-        didSaveScore.current = true; // mark the score as saved for this game once over
+        saveScoreToApi(); // run backend score submission after game ends
     }, [gameOver, playerName, score]); // make leaderboard entry
 
   return (

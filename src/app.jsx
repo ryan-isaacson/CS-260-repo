@@ -24,13 +24,43 @@ export default function App() {
 
   // keep login even if the user refreshes
   useEffect(() => {
-    const storedUser = localStorage.getItem(AUTH_USER_KEY); // read the saved user from localStorage.
-    if (storedUser) { // if the user exists in storage, we are already logged in.
-      setUserName(storedUser); // put the stored user into React state.
-      setAuthState(AuthState.Authenticated); // set the user as authenticated.
-    } else { // no stored user means we are logged out.
-      setAuthState(AuthState.Unauthenticated); // mark the user as unauthenticated.
-    }
+    const checkStoredLogin = async () => { // run async startup check for stored login
+      const storedUser = localStorage.getItem(AUTH_USER_KEY); // read the saved user from localStorage
+
+      if (!storedUser) { // no stored user means we are logged out
+        setAuthState(AuthState.Unauthenticated); // mark the user as unauthenticated
+        return;
+      }
+
+      try { // try verifying stored user against auth state
+        const response = await fetch(`/api/user/${encodeURIComponent(storedUser)}`); // ask backend if this stored user is authenticated
+
+        if (!response.ok) { // if backend lookup failed, clear local login state
+          localStorage.removeItem(AUTH_USER_KEY); // remove invalid saved user from localStorage
+          setUserName(''); // clear user name in app state
+          setAuthState(AuthState.Unauthenticated); // mark user as logged out
+          return;
+        }
+
+        const result = await response.json(); // parse backend user lookup response
+
+        if (result.authenticated) { // backend confirmed this user session is authenticated
+          setUserName(storedUser); // keep stored user in app state
+          setAuthState(AuthState.Authenticated); // mark user as authenticated
+        } 
+        else { // backend says user is not authenticated anymore
+          localStorage.removeItem(AUTH_USER_KEY); // clear stale saved login from localStorage
+          setUserName(''); // clear user name in app state
+          setAuthState(AuthState.Unauthenticated); // mark user as logged out
+        }
+      } 
+      catch (error) { // catch network/server errors during auth verification
+        localStorage.removeItem(AUTH_USER_KEY); // clear saved login if verification cannot be completed
+        setUserName(''); // clear user name in app state
+        setAuthState(AuthState.Unauthenticated); // default to logged out for safety
+      }
+    };
+    checkStoredLogin(); // run auth verification on initial app load
   }, []);
 
   return (
