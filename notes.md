@@ -77,9 +77,7 @@ One thing that helped me was seeing how one state update can affect different pa
 
 ## Service
 
-- This was harder than I expected because both the frontend and backend need to be running.
-
-For the backend I used Node.js with Express, plus cookie-parser and bcryptjs. I also used in-memory arrays/maps to store users, sessions, and scores
+This was harder than I expected because both the frontend and backend need to be running. For the backend I used Node.js with Express, plus cookie-parser and bcryptjs. I also used in-memory arrays/maps to store users, sessions, and scores
 
 Endpoints I implemented:
 
