@@ -73,3 +73,20 @@ Some of the reactivity things I used:
 - use localStorage to make it so when a game ends the score updates the leaderboard right away.
 
 One thing that helped me was seeing how one state update can affect different parts of the page at the same time. For example when time reaches 0 it hides the fish, shows game over text, and saves the score to the leaderboard.
+
+
+## Service
+
+- This was harder than I expected because both the frontend and backend need to be running.
+
+For the backend I used Node.js with Express, plus cookie-parser and bcryptjs. I also used in-memory arrays/maps to store users, sessions, and scores
+
+Endpoints I implemented:
+
+- POST /api/auth/create
+- POST /api/auth/login
+- DELETE /api/auth/logout
+- GET /api/user/:email
+- GET /api/scores
+- POST /api/score
+- GET /api/fish-fact (third-party API call)
