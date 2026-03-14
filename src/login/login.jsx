@@ -48,35 +48,49 @@ export function Login({ userName, authState, onAuthChange }) {
   };
 
 
-  // Login function
-  const handleLogin = () => {
+  // Login function - authenticate through backend api
+  const handleLogin = async () => { // make this async so we can wait for backend login response
     if (!hasValidInput()) {
       return; // if there's no input then don't do anything
     }
 
-    const stored = localStorage.getItem(REGISTERED_USER_KEY); // check saved login info
-    if (!stored) { // if the login info isn't there tell the user to register
-      setMessage('No account found. Please register first.');
-      return;
-    }
+    try { // try to call backend login endpoint
+      const response = await fetch('/api/auth/login', { // send credentials to backend for verification
+        method: 'POST', // use post because login submits credentials
+        headers: { 'Content-Type': 'application/json' }, // tell backend the request body is json
+        body: JSON.stringify({ email, password }), // include email and password in login request
+      });
 
-    const saved = JSON.parse(stored); // convert JSON string back into an object
+      const result = await response.json(); // parse backend response json
 
-    if (saved.email === email && saved.password === password) { // compare input to saved data
-      setMessage(''); // clear any previous messages after logging in
-      localStorage.setItem(AUTH_USER_KEY, email); // store the logged in user for future visits
-      onAuthChange(email, AuthState.Authenticated); // update auth state
+      if (response.status === 200) { // login succeeded on backend
+        setMessage(''); // clear any previous login error messages
+        localStorage.setItem(AUTH_USER_KEY, email); // keep user email locally to maintain login state on refresh
+        onAuthChange(email, AuthState.Authenticated); // update app auth state to logged in
+      } 
+      else if (response.status === 401 || response.status === 400) { // handle bad credentials or missing input
+        setMessage(result.message || 'Incorrect email or password.'); // show backend login error message
+      } 
+      else { // fallback for any unexpected status code
+        setMessage(result.message || 'Unexpected error during login.'); // show fallback login error
+      }
     } 
-    else { // login isn't right
-      setMessage('Incorrect email or password.');
+    catch (error) { // catch network errors when backend cannot be reached
+      setMessage('Unable to reach server. Please try again.'); // tell user server request failed
     }
   };
 
 
-  // Logout function
-  const handleLogout = () => {
-    localStorage.removeItem(AUTH_USER_KEY); // remove the logged in user from storage
-    onAuthChange('', AuthState.Unauthenticated); // change the auth state to be logged out
+  // Logout function - end backend session and clear local auth state
+  const handleLogout = async () => { // make this async so we can wait for backend logout response
+    try { // try to call backend logout endpoint
+      await fetch('/api/auth/logout', { method: 'DELETE' }); // ask backend to delete the current auth session
+    } 
+    catch (error) { // even if backend call fails we still clear local ui auth state no-op on purpose
+    }
+
+    localStorage.removeItem(AUTH_USER_KEY); // remove the logged in user from local storage
+    onAuthChange('', AuthState.Unauthenticated); // update app auth state to logged out
   };
 
   return (
