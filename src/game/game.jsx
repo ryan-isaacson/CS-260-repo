@@ -66,7 +66,7 @@ export function Game({ userName }) { // get the username to use on the page
         return () => clearInterval(timerId); // make sure the timer restarts and clears
     }, [gameStarted, timeLeft]);
 
-    // function to spawn new fish every 0.75s while the game is active
+    // function to spawn new fish every 0.5s while the game is active
     useEffect(() => {
         if (!gameStarted || gameOver) { // if the game isn't started or is over don't spawn new fish
             return;
@@ -79,7 +79,7 @@ export function Game({ userName }) { // get the username to use on the page
                 }
                 return [...currentFish, makeFishWithNewId()]; // add a new fish with a unique id to the current fish array
             });
-        }, 750); // spawn a new fish every 0.75 seconds
+        }, 500); // spawn a new fish every 0.5 seconds
 
         return () => clearInterval(spawnId); // clear the spawn timer when the game ends or restarts
     }, [gameStarted, gameOver]); // the spawn timer depends on whether the game has started and whether it's over
