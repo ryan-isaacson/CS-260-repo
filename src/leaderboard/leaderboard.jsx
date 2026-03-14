@@ -1,28 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import './leaderboard.css';
 
-const LEADERBOARD_STORAGE_KEY = 'ctf_leaderboard_scores'; // storage key for leaderboard scores
-
 // full leaderboard page functionality
 export function Leaderboard() {
     
     const [scores, setScores] = useState([]); // initialize scores as an empty array
+    const [loadMessage, setLoadMessage] = useState(''); // track leaderboard load errors for user feedback
 
     useEffect(() => {
-        const stored = localStorage.getItem(LEADERBOARD_STORAGE_KEY); // get the previously saved scores
-        const savedScores = stored // read the scores or use an empty array if there are none
-        ? JSON.parse(stored) 
-        : []; 
-        const rankedScores = [...savedScores] // sort the scores by score descending
-            .sort((a, b) => { // if scores are different, sort by score
-                if (b.score !== a.score) {
-                    return b.score - a.score;
-                }
-                return a.timestamp - b.timestamp; // if scores are the same, sort by timestamp (earlier score first)
-            })
-            .slice(0, 10); // keep only the top 10 scores
+        const loadScoresFromApi = async () => { // helper to load leaderboard scores from backend api
+            try { // try requesting leaderboard score data from backend service
+                const response = await fetch('/api/scores'); // call backend score endpoint
 
-        setScores(rankedScores); // set the top 10 scores ready to display
+                if (!response.ok) { // stop and show message if backend returns failure status
+                    setLoadMessage('Unable to load leaderboard right now.'); // show load failure message
+                    return;
+                }
+
+                const apiScores = await response.json(); // parse score list returned by backend
+                const rankedScores = [...apiScores] // sort backend scores by score descending
+                    .sort((a, b) => { // if scores are different, sort by score
+                        if (b.score !== a.score) {
+                            return b.score - a.score;
+                        }
+                        return new Date(a.date) - new Date(b.date); // if scores are the same, sort by timestamp (earlier score first)
+                    })
+                    .slice(0, 10); // keep only the top 10 scores
+
+                setScores(rankedScores); // set the top 10 scores ready to display
+                setLoadMessage(''); // clear any previous load error message
+            } catch (error) { // catch network/server errors while loading leaderboard
+                setLoadMessage('Unable to reach server for leaderboard.'); // show network failure message
+            }
+        };
+
+        loadScoresFromApi(); // load leaderboard scores when page first mounts
     }, []);
 
     return (
@@ -68,6 +80,7 @@ export function Leaderboard() {
                         )}
                     </tbody>
                 </table>
+                {loadMessage && <p>{loadMessage}</p>} {/* show leaderboard load error message when request fails */}
             </section>
         </main>
     );
