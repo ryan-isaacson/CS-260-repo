@@ -2,13 +2,29 @@ const express = require('express'); // use express so this file can run the back
 const cookieParser = require('cookie-parser'); // use cookie parser so we can read cookies on requests
 const bcrypt = require('bcryptjs'); // use bcrypt to hash passwords before storing them
 const { randomUUID } = require('crypto'); // use random uuid strings for session tokens
+const { MongoClient } = require('mongodb'); // use official mongodb driver to connect
+const config = require('./dbConfig.json'); // load mongodb credentials from config file
+
+const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`; // build atlas connection string
+const client = new MongoClient(url); // create mongo client
+const db = client.db('fishGame'); // use the fishGame database
+const userCollection = db.collection('user'); // collection for registered user accounts
+const scoreCollection = db.collection('score'); // collection for submitted scores
+
+// test connection on startup and exit if it fails
+(async function testConnection() {
+	await client.connect();
+	await db.command({ ping: 1 });
+	console.log('Connected to database');
+})().catch((ex) => {
+	console.log(`Unable to connect to database with ${url} because ${ex.message}`);
+	process.exit(1);
+});
 
 const app = express(); // create the express app object for middleware and endpoints
 const port = process.argv.length > 2 ? process.argv[2] : 4000; // use terminal port if provided, otherwise use 4000
 
-const users = []; // temporary user storage in memory (resets on restart)
-const sessions = new Map(); // temporary session storage mapping tokens to session info
-const scores = []; // temporary score storage in memory
+const sessions = new Map(); // in-memory session storage mapping tokens to session info
 const authCookieName = 'token'; // name of the cookie used for auth session token
 const fishTopics = ['Salmon', 'Clownfish', 'Tuna', 'Swordfish', 'Manta ray']; // types of fish for the random fish facts
 
@@ -27,13 +43,13 @@ app.post('/api/auth/create', async (req, res) => { // create account endpoint fo
 		return res.status(400).json({ message: 'email and password are required' }); // return bad request if missing fields
 	}
 
-	const existingUser = users.find((user) => user.email === email); // check if this email is already in use
+	const existingUser = await userCollection.findOne({ email }); // check if this email is already in use
 	if (existingUser) { // stop if a duplicate account already exists
 		return res.status(409).json({ message: 'user already exists' }); // return conflict for duplicate user
 	}
 
 	const passwordHash = await bcrypt.hash(password, 10); // hash the password before saving it
-	users.push({ email, password: passwordHash }); // save the new user with hashed password
+	await userCollection.insertOne({ email, password: passwordHash }); // save the new user with hashed password to mongodb
 
 	return res.status(201).json({ email }); // return created status and basic user info
 });
@@ -45,7 +61,7 @@ app.post('/api/auth/login', async (req, res) => { // login endpoint for existing
 		return res.status(400).json({ message: 'email and password are required' }); // return bad request if fields are missing
 	}
 
-	const user = users.find((storedUser) => storedUser.email === email); // find user by email in memory
+	const user = await userCollection.findOne({ email }); // find user by email in mongodb
 	if (!user) { // stop if no account matches this email
 		return res.status(401).json({ message: 'invalid credentials' }); // return unauthorized for bad login
 	}
@@ -73,9 +89,9 @@ app.delete('/api/auth/logout', (req, res) => { // logout endpoint for signed in 
 	return res.status(200).json({ message: 'logged out' }); // return success response for logout
 });
 
-app.get('/api/user/:email', (req, res) => { // user lookup endpoint for frontend auth checks
+app.get('/api/user/:email', async (req, res) => { // user lookup endpoint for frontend auth checks
 	const requestedEmail = req.params.email; // read target email from route parameters
-	const user = users.find((storedUser) => storedUser.email === requestedEmail); // find matching user in memory
+	const user = await userCollection.findOne({ email: requestedEmail }); // find matching user in mongodb
 
 	if (!user) { // stop if user account does not exist
 		return res.status(404).json({ message: 'user not found' }); // return not found for missing user
@@ -88,8 +104,9 @@ app.get('/api/user/:email', (req, res) => { // user lookup endpoint for frontend
 	return res.status(200).json({ email: user.email, authenticated }); // return user email and whether this request is authenticated
 });
 
-app.get('/api/scores', (req, res) => { // score read endpoint for frontend score data
-	return res.status(200).json(scores); // return all current scores from in-memory storage
+app.get('/api/scores', async (req, res) => { // score read endpoint for frontend score data
+	const scores = await scoreCollection.find({}).sort({ score: -1 }).limit(10).toArray(); // fetch top 10 scores from mongodb
+	return res.status(200).json(scores); // return scores from database
 });
 
 app.get('/api/fish-fact', async (req, res) => { // return a random fish fact directly from api
@@ -121,7 +138,7 @@ app.get('/api/fish-fact', async (req, res) => { // return a random fish fact dir
 	}
 });
 
-app.post('/api/score', (req, res) => { // submit a new score entry
+app.post('/api/score', async (req, res) => { // submit a new score entry
 	const { name, score } = req.body; // pull score payload fields from request body
 
 	if (!name || typeof score !== 'number') { // validate required score payload shape
@@ -129,7 +146,7 @@ app.post('/api/score', (req, res) => { // submit a new score entry
 	}
 
 	const scoreEntry = { name, score, date: new Date().toISOString() }; // build score object with timestamp
-	scores.push(scoreEntry); // add score entry into in-memory score storage
+	await scoreCollection.insertOne(scoreEntry); // persist score entry into mongodb
 
 	return res.status(201).json(scoreEntry); // return created score entry
 });
