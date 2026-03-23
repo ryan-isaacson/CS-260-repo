@@ -88,3 +88,14 @@ Endpoints I implemented:
 - GET /api/scores
 - POST /api/score
 - GET /api/fish-fact (third-party API call)
+
+
+## Database (MongoDB)
+
+Switched from in memory storage to MongoDB for persistent storage. Users and scores now survive server restarts.
+
+Key things I learned:
+
+- I put my database credentials in dbConfig.json and ignored that file in gitignore so I don't accidentally push passwords to GitHub
+- I used Mongodb to connect, and I ping the database on startup so it fails right away if my credentials are wrong
+- I kept sessions in memory with a Map since those can reset, but I put users and scores in MongoDB because those need to persist
