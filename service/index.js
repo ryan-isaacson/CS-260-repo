@@ -1,8 +1,10 @@
 const express = require('express'); // use express so this file can run the backend server
+const http = require('http'); // use node http server so express and websocket share the same port
 const cookieParser = require('cookie-parser'); // use cookie parser so we can read cookies on requests
 const bcrypt = require('bcryptjs'); // use bcrypt to hash passwords before storing them
 const { randomUUID } = require('crypto'); // use random uuid strings for session tokens
 const { MongoClient } = require('mongodb'); // use official mongodb driver to connect
+const { WebSocketServer } = require('ws'); // use ws library to accept websocket connections
 const config = require('./dbConfig.json'); // load mongodb credentials from config file
 
 const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`; // build atlas connection string
@@ -23,6 +25,8 @@ const scoreCollection = db.collection('score'); // collection for submitted scor
 
 const app = express(); // create the express app object for middleware and endpoints
 const port = process.argv.length > 2 ? process.argv[2] : 4000; // use terminal port if provided, otherwise use 4000
+const server = http.createServer(app); // create http server wrapper so websocket upgrade events are available
+const wss = new WebSocketServer({ noServer: true }); // create websocket server that we attach manually on upgrade
 
 const sessions = new Map(); // in-memory session storage mapping tokens to session info
 const authCookieName = 'token'; // name of the cookie used for auth session token
@@ -35,6 +39,17 @@ function getRandomItem(items) {
 app.use(express.json()); // parse incoming json bodies into req.body
 app.use(cookieParser()); // parse incoming cookies so session/auth cookies are readable
 app.use(express.static('public')); // serve static files from public for deployment
+
+server.on('upgrade', (request, socket, head) => { // handle websocket upgrade requests from the browser
+	if (request.url !== '/ws') { // only allow websocket upgrades on /ws path
+		socket.destroy(); // close unsupported websocket upgrade paths
+		return;
+	}
+
+	wss.handleUpgrade(request, socket, head, (websocket) => {
+		wss.emit('connection', websocket, request); // complete websocket handshake and establish connection
+	});
+});
 
 app.post('/api/auth/create', async (req, res) => { // create account endpoint for new users
 	const { email, password } = req.body; // pull email and password
@@ -151,6 +166,6 @@ app.post('/api/score', async (req, res) => { // submit a new score entry
 	return res.status(201).json(scoreEntry); // return created score entry
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
 	console.log(`Listening on port ${port}`); // log the port so I know the server started
 });
