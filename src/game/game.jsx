@@ -22,9 +22,22 @@ export function Game({ userName }) { // get the username to use on the page
     const [feedMessages, setFeedMessages] = useState([]); // keep track of game feed notifications
     const fishIdCounter = useRef(0); // make a fishIdCounter function to keep track of the next unique fish id to use
     const didSaveScore = useRef(false); // make a didSaveScore function to make sure we only save the score once per game over
+    const wsRef = useRef(null); // keep websocket reference for later phases where we send and receive realtime messages
 
     const gameOver = gameStarted && timeLeft === 0;
     const playerName = userName || 'Player'; // make a playerName variable to use elsewhere
+
+    // connect to backend websocket when game page mounts
+    useEffect(() => {
+        const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'; // use secure websocket on https and standard websocket on http
+        const socket = new WebSocket(`${protocol}://${window.location.host}/ws`); // open websocket connection to backend /ws endpoint
+        wsRef.current = socket; // store websocket so later phases can use this same connection
+
+        return () => {
+            socket.close(); // close websocket when component unmounts so old connections don't stay open
+            wsRef.current = null; // clear stored websocket reference after close
+        };
+    }, []);
 
     const makeFishWithNewId = () => { // helper function to create a new fish with a unique id
         const fishId = fishIdCounter.current; // get the current fish id from the counter
