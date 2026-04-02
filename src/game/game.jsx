@@ -45,6 +45,13 @@ export function Game({ userName }) { // get the username to use on the page
             setFeedMessages((currentMessages) => [...currentMessages, 'Live connection closed'].slice(-8)); // show when websocket disconnects
         };
 
+        socket.onmessage = (event) => { // handle incoming broadcast messages from the backend
+            const msg = JSON.parse(event.data); // parse the json payload
+            if (msg.type === 'gameFeed') { // only handle feed events
+                setFeedMessages((currentMessages) => [...currentMessages, msg.text].slice(-8)); // add to feed and cap at 8 messages
+            }
+        };
+
         return () => {
             socket.close(); // close websocket when component unmounts so old connections don't stay open
             wsRef.current = null; // clear stored websocket reference after close

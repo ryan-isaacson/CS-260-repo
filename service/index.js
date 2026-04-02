@@ -51,10 +51,22 @@ server.on('upgrade', (request, socket, head) => { // handle websocket upgrade re
 	});
 });
 
+function broadcast(event) { // send an event to every currently connected websocket client
+	const payload = JSON.stringify(event); // serialize once so we don't repeat it per client
+	for (const client of wss.clients) { // loop over all active connections
+		if (client.readyState === client.OPEN) { // skip any clients that are closing or already closed
+			client.send(payload); // push the event to this client
+		}
+	}
+}
+
 wss.on('connection', (websocket) => { // handle each new websocket connection from the frontend
 	websocket.on('message', (raw) => { // listen for messages sent from the browser
 		const msg = JSON.parse(raw.toString()); // parse the incoming json message
 		console.log('received:', msg); // log the message so we can verify it arrives
+		if (msg.type === 'gameStart') { // when a player starts a game, tell everyone
+			broadcast({ type: 'gameFeed', text: `${msg.name} started a new game` }); // push a feed event to all connected clients
+		}
 	});
 });
 
