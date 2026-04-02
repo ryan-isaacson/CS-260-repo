@@ -33,6 +33,18 @@ export function Game({ userName }) { // get the username to use on the page
         const socket = new WebSocket(`${protocol}://${window.location.host}/ws`); // open websocket connection to backend /ws endpoint
         wsRef.current = socket; // store websocket so later phases can use this same connection
 
+        socket.onopen = () => {
+            setFeedMessages((currentMessages) => [...currentMessages, 'Live connection established'].slice(-8)); // show that websocket connected successfully
+        };
+
+        socket.onerror = () => {
+            setFeedMessages((currentMessages) => [...currentMessages, 'Live connection error'].slice(-8)); // show websocket error message for debugging
+        };
+
+        socket.onclose = () => {
+            setFeedMessages((currentMessages) => [...currentMessages, 'Live connection closed'].slice(-8)); // show when websocket disconnects
+        };
+
         return () => {
             socket.close(); // close websocket when component unmounts so old connections don't stay open
             wsRef.current = null; // clear stored websocket reference after close
