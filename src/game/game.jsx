@@ -63,6 +63,9 @@ export function Game({ userName }) { // get the username to use on the page
         fishIdCounter.current = 0; // reset the fish id counter for each new game
         didSaveScore.current = false; // reset the score saved flag for each new game
         setFeedMessages((currentMessages) => [...currentMessages, `${playerName} started a new game`].slice(-8)); // add start game message and keep only the last 8 notifications
+        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) { // only send if the websocket is open
+            wsRef.current.send(JSON.stringify({ type: 'gameStart', name: playerName })); // tell the backend a new game started
+        }
         setFish(Array.from({ length: INITIAL_FISH_COUNT }, () => makeFishWithNewId())); // create the initial fish for the game
         setGameStarted(true);
     };

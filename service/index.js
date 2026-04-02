@@ -51,6 +51,13 @@ server.on('upgrade', (request, socket, head) => { // handle websocket upgrade re
 	});
 });
 
+wss.on('connection', (websocket) => { // handle each new websocket connection from the frontend
+	websocket.on('message', (raw) => { // listen for messages sent from the browser
+		const msg = JSON.parse(raw.toString()); // parse the incoming json message
+		console.log('received:', msg); // log the message so we can verify it arrives
+	});
+});
+
 app.post('/api/auth/create', async (req, res) => { // create account endpoint for new users
 	const { email, password } = req.body; // pull email and password
 
