@@ -99,3 +99,15 @@ Key things I learned:
 - I put my database credentials in dbConfig.json and ignored that file in gitignore so I don't accidentally push passwords to GitHub
 - I used Mongodb to connect, and I ping the database on startup so it fails right away if my credentials are wrong
 - I kept sessions in memory with a Map since those can reset, but I put users and scores in MongoDB because those need to persist
+
+
+## WebSocket
+
+This part made more sense once I did it in small steps. First I got the backend listening, then connected the frontend, then tested one message, and after that sent it out to everyone.
+
+Things I learned:
+
+- WebSockets let the server push messages back to all connected clients without the browser constantly asking for updates
+- I had to use an http server wrapper around Express so the websocket server and the backend could share the same port
+- Vite needed a `/ws` proxy with websocket support or the frontend connection would not work correctly in development
+
