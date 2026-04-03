@@ -62,7 +62,15 @@ function broadcast(event) { // send an event to every currently connected websoc
 
 wss.on('connection', (websocket) => { // handle each new websocket connection from the frontend
 	websocket.on('message', (raw) => { // listen for messages sent from the browser
-		const msg = JSON.parse(raw.toString()); // parse the incoming json message
+		let msg;
+
+		try {
+			msg = JSON.parse(raw.toString()); // parse the incoming json message
+		} catch {
+			console.log('Ignoring malformed websocket message'); // skip invalid websocket payloads without crashing the server
+			return;
+		}
+
 		console.log('received:', msg); // log the message so we can verify it arrives
 		if (msg.type === 'gameStart') { // when a player starts a game, tell everyone
 			broadcast({ type: 'gameFeed', text: `${msg.name} started a new game` }); // push a feed event to all connected clients
@@ -181,6 +189,7 @@ app.post('/api/score', async (req, res) => { // submit a new score entry
 
 	const scoreEntry = { name, score, date: new Date().toISOString() }; // build score object with timestamp
 	await scoreCollection.insertOne(scoreEntry); // persist score entry into mongodb
+	broadcast({ type: 'gameFeed', text: `${name} ended the game with ${score} points` }); // push a score completion update to every connected client
 
 	return res.status(201).json(scoreEntry); // return created score entry
 });

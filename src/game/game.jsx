@@ -46,7 +46,14 @@ export function Game({ userName }) { // get the username to use on the page
         };
 
         socket.onmessage = (event) => { // handle incoming broadcast messages from the backend
-            const msg = JSON.parse(event.data); // parse the json payload
+            let msg;
+
+            try {
+                msg = JSON.parse(event.data); // parse the json payload
+            } catch {
+                return; // ignore malformed websocket payloads without breaking the game page
+            }
+
             if (msg.type === 'gameFeed') { // only handle feed events
                 setFeedMessages((currentMessages) => [...currentMessages, msg.text].slice(-8)); // add to feed and cap at 8 messages
             }
@@ -69,9 +76,11 @@ export function Game({ userName }) { // get the username to use on the page
         setScore(0); // reset score when a new game starts
         fishIdCounter.current = 0; // reset the fish id counter for each new game
         didSaveScore.current = false; // reset the score saved flag for each new game
-        setFeedMessages((currentMessages) => [...currentMessages, `${playerName} started a new game`].slice(-8)); // add start game message and keep only the last 8 notifications
         if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) { // only send if the websocket is open
             wsRef.current.send(JSON.stringify({ type: 'gameStart', name: playerName })); // tell the backend a new game started
+        }
+        else {
+            setFeedMessages((currentMessages) => [...currentMessages, `${playerName} started a new game`].slice(-8)); // fall back to local feed update if websocket is unavailable
         }
         setFish(Array.from({ length: INITIAL_FISH_COUNT }, () => makeFishWithNewId())); // create the initial fish for the game
         setGameStarted(true);
@@ -137,7 +146,9 @@ export function Game({ userName }) { // get the username to use on the page
                 });
 
                 if (response.status === 201) { // score save succeeded on backend
-                    setFeedMessages((currentMessages) => [...currentMessages, `${playerName} ended the game with ${score} points`].slice(-8)); // add successful end-game message and keep latest 8
+                    if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
+                        setFeedMessages((currentMessages) => [...currentMessages, `${playerName} ended the game with ${score} points`].slice(-8)); // fall back to local feed update if websocket is unavailable
+                    }
                 }
                 else { // handle any other unexpected backend response status
                     setFeedMessages((currentMessages) => [...currentMessages, 'Score save failed'].slice(-8)); // show generic score save failure message
